@@ -113,12 +113,11 @@ if (cmd === "add") {
   }
   const pm = existsSync(join(cwd, "pnpm-lock.yaml")) ? "pnpm" : "npm";
   console.log("[dsh-reasoning-zh] 执行 " + pm + " remove dsh-reasoning-zh ...");
-  // Windows 上包管理器是可执行批处理（npm.cmd / pnpm.cmd），直接调 .cmd 避免 shell
-  const pmBin = process.platform === "win32" ? pm + ".cmd" : pm;
-  const res = spawnSync(pmBin, ["remove", "dsh-reasoning-zh"], {
-    cwd,
-    stdio: "inherit"
-  });
+  // Windows 上包管理器是 .cmd 批处理，直接 spawn 会 EINVAL，用 cmd /d /s /c 执行
+  // （POSIX 直接 spawn 即可；都不需要 shell:true，避免弃用警告）。
+  const res = process.platform === "win32"
+    ? spawnSync(process.env.ComSpec || "cmd.exe", ["/d", "/s", "/c", pm + " remove dsh-reasoning-zh"], { cwd, stdio: "inherit" })
+    : spawnSync(pm, ["remove", "dsh-reasoning-zh"], { cwd, stdio: "inherit" });
   if (res.status !== 0) {
     console.log("[dsh-reasoning-zh] " + pm + " remove 未完全成功；若是手动复制安装的，请手动删除 node_modules/dsh-reasoning-zh 目录");
   }
