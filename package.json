@@ -1,0 +1,18 @@
+{
+  "name": "dsh-reasoning-zh",
+  "version": "0.1.0",
+  "description": "把模型选择器「推理等级」（reasoning effort）的档位名翻译成中文：Off→关闭、Low→低、Medium→中、High→高、Max→最大、Default→默认。宿主侧包装 llm 适配器翻译档位名，客户端侧兜底翻译已渲染的英文标签。",
+  "type": "module",
+  "main": "lib/index.js",
+  "exports": {
+    ".": { "default": "./lib/index.js" },
+    "./client": { "default": "./lib/client.js" },
+    "./package.json": "./package.json"
+  },
+  "license": "MIT",
+  "dsh": {
+    "client": {
+      "platform": "web"
+    }
+  }
+}
