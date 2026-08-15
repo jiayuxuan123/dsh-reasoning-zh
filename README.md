@@ -28,12 +28,14 @@
 
 ## 安装 / Install
 
-方式一（推荐，npm）：
+方式一（推荐，npm —— 全自动）：
 
 ```bash
 cd ~/.dsh/profiles/web
 npm install dsh-reasoning-zh
 ```
+
+`postinstall` 会自动把注册块写入 `cordis.patch.yml`，无需手动编辑，profile HMR 直接生效。如需自定义档位，再在注册块上加 `config`（见下）。
 
 方式二（源码，从 GitHub 克隆）：
 
@@ -61,7 +63,16 @@ profile 的 HMR 会热生效；刷新页面（Ctrl+R）加载客户端半边。�
 
 ## 卸载 / Uninstall
 
-删除 `cordis.patch.yml` 里的 `reasoning-zh` insert 块，再删除 `node_modules/dsh-reasoning-zh/` 目录。
+npm 安装的（推荐）：
+
+```bash
+cd ~/.dsh/profiles/web
+npm uninstall dsh-reasoning-zh
+```
+
+`postuninstall` 会自动移除 `cordis.patch.yml` 里的注册块并删除包文件，无需手动编辑。
+
+手动安装的：删除 `cordis.patch.yml` 里的 `reasoning-zh` insert 块，再删除 `node_modules/dsh-reasoning-zh/` 目录。
 
 ## License
 
