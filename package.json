@@ -7,12 +7,33 @@
   "scripts": {
     "test": "node test/reasoning-zh.test.mjs"
   },
+  "files": [
+    "lib",
+    "test",
+    "README.md",
+    "LICENSE"
+  ],
   "exports": {
     ".": { "default": "./lib/index.js" },
     "./client": { "default": "./lib/client.js" },
     "./package.json": "./package.json"
   },
+  "keywords": [
+    "dsh",
+    "dsh-plugin",
+    "deepseek-harness",
+    "deepseek",
+    "reasoning-effort",
+    "i18n",
+    "chinese",
+    "中文"
+  ],
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jiayuxuan123/dsh-reasoning-zh.git"
+  },
+  "homepage": "https://github.com/jiayuxuan123/dsh-reasoning-zh",
   "dsh": {
     "client": {
       "platform": "web"

@@ -1,5 +1,7 @@
 # dsh-reasoning-zh
 
+[![npm version](https://img.shields.io/npm/v/dsh-reasoning-zh)](https://www.npmjs.com/package/dsh-reasoning-zh) [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+
 [DeepSeek Harness](https://github.com/deepseek-ai/dsh)（DSH）Web GUI 插件：把「推理等级」（reasoning effort）档位名翻译成中文，并让接入的自定义第三方模型也能显示推理等级。
 
 - **翻译**：模型选择器里的「推理等级」档位名（Off/Low/Medium/High/Max/Default 等）显示为中文。
@@ -26,29 +28,36 @@
 
 ## 安装 / Install
 
-1. 把本仓库克隆或复制为 `~/.dsh/profiles/web/node_modules/dsh-reasoning-zh/`：
+方式一（推荐，npm）：
 
-   ```bash
-   git clone https://github.com/jiayuxuan123/dsh-reasoning-zh.git "$HOME/.dsh/profiles/web/node_modules/dsh-reasoning-zh"
-   ```
+```bash
+cd ~/.dsh/profiles/web
+npm install dsh-reasoning-zh
+```
 
-2. 在 `~/.dsh/profiles/web/cordis.patch.yml` 末尾追加（`config` 可选，全部有默认值）：
+方式二（源码，从 GitHub 克隆）：
 
-   ```yaml
-   - insert:
-       - id: reasoning-zh
-         name: 'dsh-reasoning-zh'
-         config:
-           enabled: true              # 总开关（默认 true）
-           injectThirdParty: true     # 为未声明 reasoning 的第三方模型注入档位（默认 true）
-           levels: [off, high, max]   # 注入的档位 id 列表（默认 off/high/max）
-           defaultLevel: high         # 注入档位的默认选中项（默认 high）
-           wireField: reasoning_effort # 出站请求体字段名（默认 reasoning_effort）
-   ```
+```bash
+git clone https://github.com/jiayuxuan123/dsh-reasoning-zh.git "$HOME/.dsh/profiles/web/node_modules/dsh-reasoning-zh"
+```
 
-   profile 的 HMR 会热生效；刷新页面（Ctrl+R）加载客户端半边。修改 `config` 后 HMR 会以新配置重跑宿主半边。
+装好后，在 `~/.dsh/profiles/web/cordis.patch.yml` 末尾追加（`config` 可选，全部有默认值）：
 
-3. 首次安装或更新 `lib/` 后，需要重启一次服务（插件市场 →「立即重启服务」，或重启 DSH Desktop）让新的宿主代码生效。
+```yaml
+- insert:
+    - id: reasoning-zh
+      name: 'dsh-reasoning-zh'
+      config:
+        enabled: true              # 总开关（默认 true）
+        injectThirdParty: true     # 为未声明 reasoning 的第三方模型注入档位（默认 true）
+        levels: [off, high, max]   # 注入的档位 id 列表（默认 off/high/max）
+        defaultLevel: high         # 注入档位的默认选中项（默认 high）
+        wireField: reasoning_effort # 出站请求体字段名（默认 reasoning_effort）
+```
+
+profile 的 HMR 会热生效；刷新页面（Ctrl+R）加载客户端半边。修改 `config` 后 HMR 会以新配置重跑宿主半边。
+
+首次安装或更新 `lib/` 后，需要重启一次服务（插件市场 →「立即重启服务」，或重启 DSH Desktop）让新的宿主代码生效。
 
 ## 卸载 / Uninstall
 
