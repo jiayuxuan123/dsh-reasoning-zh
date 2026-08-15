@@ -28,14 +28,15 @@
 
 ## 安装 / Install
 
-方式一（推荐，npm —— 全自动）：
+方式一（推荐，npm）：
 
 ```bash
 cd ~/.dsh/profiles/web
 npm install dsh-reasoning-zh
+node node_modules/dsh-reasoning-zh/scripts/cli.mjs add
 ```
 
-`postinstall` 会自动把注册块写入 `cordis.patch.yml`，无需手动编辑，profile HMR 直接生效。如需自定义档位，再在注册块上加 `config`（见下）。
+`cli.mjs add` 自动把注册块写入 `cordis.patch.yml`（幂等），profile HMR 直接生效，无需手动编辑。如需自定义档位，再在注册块上加 `config`（见下）。pnpm 管理的 profile 用 `pnpm add dsh-reasoning-zh` 代替 `npm install`。
 
 方式二（源码，从 GitHub 克隆）：
 
@@ -63,16 +64,14 @@ profile 的 HMR 会热生效；刷新页面（Ctrl+R）加载客户端半边。�
 
 ## 卸载 / Uninstall
 
-npm 安装的（推荐）：
-
 ```bash
 cd ~/.dsh/profiles/web
-npm uninstall dsh-reasoning-zh
+node node_modules/dsh-reasoning-zh/scripts/cli.mjs uninstall
 ```
 
-`postuninstall` 会自动移除 `cordis.patch.yml` 里的注册块并删除包文件，无需手动编辑。
+一条命令完成：自动移除 `cordis.patch.yml` 里的注册块，并自动执行 `pnpm remove` / `npm uninstall` 删除包文件。npm / pnpm 都不会为被卸载的依赖运行卸载生命周期脚本，所以用这个命令代替手动编辑。
 
-手动安装的：删除 `cordis.patch.yml` 里的 `reasoning-zh` insert 块，再删除 `node_modules/dsh-reasoning-zh/` 目录。
+手动安装的（git 克隆）：删除 `cordis.patch.yml` 里的 `reasoning-zh` insert 块，再删除 `node_modules/dsh-reasoning-zh/` 目录（或运行 `node node_modules/dsh-reasoning-zh/scripts/cli.mjs remove` 自动移除注册块）。
 
 ## License
 
