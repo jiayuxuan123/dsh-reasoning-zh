@@ -31,10 +31,17 @@ const deepseekAdapter = makeAdapter("DeepSeekAdapter", [
   { id: "deepseek-v4-flash", name: "DeepSeek-V4-Flash", reasoning: { efforts: [{ id: "off", name: "Off" }, { id: "high", name: "High" }, { id: "max", name: "Max" }], defaultEffort: "high" } }
 ]);
 
+// PiAiAdapter 同属原生 reasoning 适配器：只翻译已声明档位、不为裸模型注入、不包装 stream。
+const piAiAdapter = makeAdapter("PiAiAdapter", [
+  { id: "gpt-5.6-luna", name: "gpt-5.6-luna", reasoning: { efforts: [{ id: "off", name: "Off" }, { id: "low", name: "Low" }, { id: "high", name: "High" }], defaultEffort: "high" } },
+  { id: "deepseek-v4-flash", name: "deepseek-v4-flash" }
+]);
+
 const adapters = new Map([
   ["poke2", { adapter: poke2Adapter }],
   ["custom", { adapter: customAdapter }],
-  ["deepseek-official", { adapter: deepseekAdapter }]
+  ["deepseek-official", { adapter: deepseekAdapter }],
+  ["pi-ai", { adapter: piAiAdapter }]
 ]);
 
 let emitted = 0;
@@ -75,6 +82,14 @@ check("deepseek: 无 stream 包装", ds.stream === deepseekAdapter.stream);
 // 5) 原生豁免 + 包装标记
 check("adapters 已被包装", p2.__dshReasoningZhWrapped === true && cu.__dshReasoningZhWrapped === true && ds.__dshReasoningZhWrapped === true);
 check("apply 广播过 llm/adapters-updated", emitted >= 1, emitted);
+
+// 5b) PiAiAdapter：只翻译已声明档位；裸模型不被注入；不包装 stream。
+const pi = adapters.get("pi-ai").adapter;
+m = await pi.resolveModel("pi-ai", "gpt-5.6-luna");
+check("pi-ai declared: 档位名翻译", m.reasoning.efforts.map((e) => `${e.id}=${e.name}`).join(",") === "off=关闭,low=低,high=高", m.reasoning.efforts.map((e) => `${e.id}=${e.name}`));
+m = await pi.resolveModel("pi-ai", "deepseek-v4-flash");
+check("pi-ai naked: 不注入（交给适配器自身能力）", m.reasoning === void 0, m.reasoning);
+check("pi-ai: 无 stream 包装", pi.stream === piAiAdapter.stream);
 
 // 6) 自定义 config：注入不同档位（off/low/max，默认 low）
 const adapters2 = new Map([["custom2", { adapter: makeAdapter("XAdapter", [{ id: "x", name: "x" }]) }]]);

@@ -1,6 +1,6 @@
 {
   "name": "dsh-reasoning-zh",
-  "version": "0.2.4",
+  "version": "0.2.5",
   "description": "DeepSeek Harness 插件：把「推理等级」(reasoning effort) 档位名翻译成中文，并为接入的自定义第三方模型注入推理等级显示（官方 DSH 默认不注入），所选档位写入出站请求体。",
   "type": "module",
   "main": "lib/index.js",

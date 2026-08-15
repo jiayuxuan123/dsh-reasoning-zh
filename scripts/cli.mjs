@@ -27,6 +27,14 @@ function addBlock(src, eol) {
   const has = /(^|\r?\n)- insert:\r?\n[ \t]+- id: reasoning-zh(\r?\n|$)/.test(src);
   if (has) return { text: src, changed: false };
   const block = ["- insert:", "    - id: reasoning-zh", "      name: 'dsh-reasoning-zh'"].join(eol);
+  // 全新 profile 的 patch 模板是空数组 `[]`：直接追加在它后面是非法 YAML
+  // （flow 序列之后不能紧跟块序列项，js-yaml 会解析失败），把这一行整体
+  // 替换为注册块；已有条目的文件才走追加。
+  const emptyArray = /(^|\r?\n)[ \t]*\[\][ \t]*(?=\r?\n|$)/;
+  const match = src.match(emptyArray);
+  if (match) {
+    return { text: src.slice(0, match.index) + match[1] + block + src.slice(match.index + match[0].length), changed: true };
+  }
   const text = src.endsWith(eol) ? src + block + eol : src + eol + block + eol;
   return { text, changed: true };
 }
@@ -73,7 +81,14 @@ function removeBlock(src, eol) {
     out.push(line);
     i++;
   }
-  return { text: out.join(eol), changed };
+  const text = out.join(eol);
+  // 移除后若只剩注释/空白（没有任何条目），补回空数组 `[]`：纯注释的 YAML
+  // 解析为 null 而非顶层数组，loader 的 include 会因“不是数组”而启动失败。
+  const hasEntry = /(^|\r?\n)[ \t]*-[ \t]+\S/.test(text) || /(^|\r?\n)[ \t]*\[/.test(text);
+  if (changed && !hasEntry) {
+    return { text: text.endsWith(eol) ? text + "[]" + eol : text + eol + "[]" + eol, changed };
+  }
+  return { text, changed };
 }
 
 /** 读取并就地修改 patch 文件；返回是否发生变更。 */

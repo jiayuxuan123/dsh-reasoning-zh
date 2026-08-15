@@ -19,7 +19,7 @@
 | `max` | 最大 | Max |
 | （provider 默认） | 默认 | Default |
 
-档位名（`reasoning.efforts[].name`）是纯展示字段，wire 层只使用档位 id，因此翻译/注入名称不影响请求行为；原生 DeepSeek 适配器（自带 reasoning 机制）只做翻译、不做 wire 注入。
+档位名（`reasoning.efforts[].name`）是纯展示字段，wire 层只使用档位 id，因此翻译/注入名称不影响请求行为；原生 DeepSeek 与 pi-ai 适配器（自带 reasoning 机制）只做翻译、不做 wire 注入。
 
 ## 工作原理 / How it works
 
