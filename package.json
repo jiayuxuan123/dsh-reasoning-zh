@@ -1,7 +1,7 @@
 {
   "name": "dsh-reasoning-zh",
-  "version": "0.1.0",
-  "description": "把模型选择器「推理等级」（reasoning effort）的档位名翻译成中文：Off→关闭、Low→低、Medium→中、High→高、Max→最大、Default→默认。宿主侧包装 llm 适配器翻译档位名，客户端侧兜底翻译已渲染的英文标签。",
+  "version": "0.2.0",
+  "description": "DeepSeek Harness 插件：把「推理等级」(reasoning effort) 档位名翻译成中文，并为接入的自定义第三方模型注入推理等级显示（官方 DSH 默认不注入），所选档位写入出站请求体。",
   "type": "module",
   "main": "lib/index.js",
   "exports": {
